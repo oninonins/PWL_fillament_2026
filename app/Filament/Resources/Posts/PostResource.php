@@ -24,6 +24,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\ImageColumn;
+
 use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -36,56 +37,14 @@ class PostResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-   public static function form(Schema $form): Schema
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                TextInput::make('title')
-                    ->required()
-                    ->minLength(5), // Tugas Praktikum: Minimal 5 karakter
-                TextInput::make('slug')
-                    ->required()
-                    ->unique(ignoreRecord: true), // Tugas Praktikum: Slug harus unik
-                Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                ColorPicker::make('color'),
-                RichEditor::make('body'), // Sesuai migration kamu namanya 'body'
-                FileUpload::make('image')
-                    ->disk('public')
-                    ->directory('posts'),
-                TagsInput::make('tags'),
-                Checkbox::make('published'),
-                DateTimePicker::make('published_at'),
-            ]);
+        return PostForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('title')->searchable(),
-                TextColumn::make('slug'),
-                TextColumn::make('category.name'), 
-                ColorColumn::make('color'),
-                ImageColumn::make('image')->disk('public'),
-                // Tugas Praktikum: Ikon Boolean untuk Published
-                \Filament\Tables\Columns\IconColumn::make('published')
-                    ->boolean(), 
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+        return PostsTable::configure($table);
     }
 
     public static function getRelations(): array

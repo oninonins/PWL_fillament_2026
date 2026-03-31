@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Posts\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\ColorPicker;
 
 class PostForm
 {
@@ -13,6 +15,13 @@ class PostForm
             ->components([
                 TextInput::make('title')->required(), 
                 TextInput::make('slug')->required(), 
+                Select::make('category_id') 
+                ->label('Category') 
+                ->options( \App\Models\Category::all()
+                ->pluck('name', 'id') 
+                    )
+                 ->required(), 
+                  ColorPicker::make('color'), 
             ]);
     }
 }
