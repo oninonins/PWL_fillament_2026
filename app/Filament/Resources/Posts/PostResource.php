@@ -39,7 +39,7 @@ class PostResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return PostForm::configure($schema);
+        return \App\Filament\Resources\Posts\Schemas\PostForm::configure($schema);
     }
 
     public static function table(Table $table): Table
